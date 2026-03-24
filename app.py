@@ -2,13 +2,34 @@ import streamlit as st
 import chromadb
 from chromadb.config import Settings
 from sentence_transformers import SentenceTransformer
+import os
+import zipfile
+import requests
 
-# modelo
+# 🔗 TU BASE (Drive)
+URL_ZIP = "https://drive.google.com/uc?id=17MmP7pwNWa0VX1D8dKsbRwa-rUPXGrnx"
+
+# 📦 Descargar y descomprimir base si no existe
+def descargar_db():
+    if not os.path.exists("chroma_db"):
+        st.write("Descargando base de datos...")
+
+        r = requests.get(URL_ZIP)
+        with open("db.zip", "wb") as f:
+            f.write(r.content)
+
+        with zipfile.ZipFile("db.zip", 'r') as zip_ref:
+            zip_ref.extractall()
+
+        st.write("Base lista")
+
+descargar_db()
+
+# 🤖 Modelo
 modelo = SentenceTransformer("all-MiniLM-L6-v2")
 
-# conexión (local)
+# 🗂️ Conexión a Chroma
 client = chromadb.Client(Settings(persist_directory="./chroma_db"))
-
 collection = client.get_collection(name="tesis_rag_final")
 
 st.title("Buscador Jurídico Inteligente")
