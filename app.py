@@ -1,8 +1,10 @@
 import os
-os.environ["STREAMLIT_SERVER_PORT"] = os.environ.get("PORT", "10000")
-os.environ["STREAMLIT_SERVER_ADDRESS"] = "0.0.0.0"
+
+PORT = int(os.environ.get("PORT", 10000))
+
 import streamlit as st
 import chromadb
+from chromadb.config import Settings
 from sentence_transformers import SentenceTransformer
 import os
 import zipfile
